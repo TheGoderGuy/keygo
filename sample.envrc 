@@ -1,0 +1,4 @@
+export KEYCLOAK_URL="http://localhost:8080"
+export KEYCLOAK_REALM="myrealm"
+export KEYCLOAK_CLIENT_ID="user-manager"
+export KEYCLOAK_CLIENT_SECRET="your-client-secret"
