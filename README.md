@@ -56,8 +56,9 @@ go build -o createuser main.go
 ---
 
 ## 📌 Expected Output  
+```sh
 User created successfully with an initial password (must be changed on first login)!  
-
+```
 Now you have a fully configured, easy-to-use Keycloak user creation tool! 🚀  
 
 ---
