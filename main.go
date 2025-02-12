@@ -18,6 +18,7 @@ type CLI struct {
 	ClientID     string `help:"Keycloak client ID" env:"KEYCLOAK_CLIENT_ID" default:"user-manager"`
 	ClientSecret string `help:"Keycloak client secret" env:"KEYCLOAK_CLIENT_SECRET" required:""`
 	Username     string `arg:"" name:"username" help:"Username for the new Keycloak user" required:""`
+	Email        string `arg:"" name:"email" help:"Email for the new Keycloak user" required:""`
 	Password     string `arg:"" name:"password" help:"Password for the new Keycloak user" required:""`
 }
 
@@ -59,8 +60,10 @@ func createUser(cli *CLI, token string) (string, error) {
 		SetAuthToken(token).
 		SetHeader("Content-Type", "application/json").
 		SetBody(map[string]interface{}{
-			"username": cli.Username,
-			"enabled":  true,
+			"username": 	 cli.Username,
+			"enabled":  	 true,
+			"email":         cli.Email,
+			"emailVerified": true, 
 		}).
 		Post(fmt.Sprintf("%s/admin/realms/%s/users", cli.KeycloakURL, cli.Realm))
 
@@ -78,29 +81,6 @@ func createUser(cli *CLI, token string) (string, error) {
 	return userID, nil
 }
 
-// Function to set user password (for updates, uses /reset-password)
-func setUserPassword(cli *CLI, token, userID string) error {
-	resp, err := resty.R().
-		SetAuthToken(token).
-		SetHeader("Content-Type", "application/json").
-		SetBody(map[string]interface{}{
-			"type":      "password",
-			"value":     cli.Password,
-			"temporary": false, // User keeps this password
-		}).
-		Put(fmt.Sprintf("%s/admin/realms/%s/users/%s/reset-password", cli.KeycloakURL, cli.Realm, userID))
-
-	if err != nil {
-		return err
-	}
-
-	if resp.StatusCode() != http.StatusNoContent {
-		return fmt.Errorf("failed to set password: %s", resp.String())
-	}
-
-	return nil
-}
-
 // Function to set an initial password using /credentials
 func setInitialPassword(cli *CLI, token, userID string) error {
 	resp, err := resty.R().
@@ -111,13 +91,12 @@ func setInitialPassword(cli *CLI, token, userID string) error {
 			"value":     cli.Password,
 			"temporary": true, // User must change this password on first login
 		}).
-		Post(fmt.Sprintf("%s/admin/realms/%s/users/%s/credentials", cli.KeycloakURL, cli.Realm, userID))
+		Put(fmt.Sprintf("%s/admin/realms/%s/users/%s/reset-password", cli.KeycloakURL, cli.Realm, userID))
 
 	if err != nil {
 		return err
 	}
-
-	if resp.StatusCode() != http.StatusCreated {
+	if resp.StatusCode() != http.StatusNoContent {
 		return fmt.Errorf("failed to set initial password: %s", resp.String())
 	}
 
