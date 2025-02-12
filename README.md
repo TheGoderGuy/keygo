@@ -30,9 +30,9 @@ Instead of passing parameters every time, set them as environment variables:
 
 ## 🚀 How to Use  
 With environment variables set:  
-
+```sh
 go run main.go newuser user@example.com mypassword  
-
+```
 Or pass parameters via CLI:  
 
 ```sh 
