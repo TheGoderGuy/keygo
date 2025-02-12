@@ -46,9 +46,9 @@ go run main.go --keycloak-url="http://my-keycloak.com" \
 
 ## 📌 Running as an Executable  
 1. Build the binary:  
-
+```sh
 go build -o createuser main.go  
-
+```
 2. Run the executable:  
 ```sh
 ./createuser newuser user@example.com newpassword  
