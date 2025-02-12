@@ -30,9 +30,9 @@ Instead of passing parameters every time, set them as environment variables:
 
 ## 🚀 How to Use  
 With environment variables set:  
-
+```sh
 go run main.go newuser user@example.com mypassword  
-
+```
 Or pass parameters via CLI:  
 
 ```sh 
@@ -46,9 +46,9 @@ go run main.go --keycloak-url="http://my-keycloak.com" \
 
 ## 📌 Running as an Executable  
 1. Build the binary:  
-
+```sh
 go build -o createuser main.go  
-
+```
 2. Run the executable:  
 ```sh
 ./createuser newuser user@example.com newpassword  
@@ -56,8 +56,9 @@ go build -o createuser main.go
 ---
 
 ## 📌 Expected Output  
+```sh
 User created successfully with an initial password (must be changed on first login)!  
-
+```
 Now you have a fully configured, easy-to-use Keycloak user creation tool! 🚀  
 
 ---
